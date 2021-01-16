@@ -137,9 +137,7 @@ def printtree(tree, indent=''):
 # --------------------- t12 ---------------------
 # Función de clasificación.
 # --------------------- t13 ---------------------
-# --------------------- t14 ---------------------
-# --------------------- t15 ---------------------
-# --------------------- t16 ---------------------
+
 if __name__ == '__main__':
     prototypes = read_file("decision_tree_example.txt", data_sep=",", ignore_first_line=True)
     count = unique_counts(prototypes)
