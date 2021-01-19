@@ -114,6 +114,21 @@ class desicionnode:
 
 # --------------------- t9  ---------------------
 # Construcción del árbol de forma recursiva.
+def buildtree(dataset,score_func = gini_impurity,beta=0):
+    if len(dataset) == 0:
+        return desicionnode()
+    impurity=score_func(dataset)
+
+    # best split criteria
+    best_impurity_decrease=0
+    criteria=None
+    sets=[None],[None]
+    #todo search bests criteria
+    if best_impurity_decrease > beta:
+        pass  # todo recursion subtree -1,None
+        return desicionnode(col=-1, value=None, tb=buildtree(sets[0]), fb=buildtree(sets[0]))
+    else:
+        return desicionnode(results=unique_counts(dataset))
 
 # --------------------- t10 ---------------------
 # Construcción del árbol de forma iterativa.
