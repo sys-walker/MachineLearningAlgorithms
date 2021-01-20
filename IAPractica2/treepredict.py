@@ -118,7 +118,7 @@ def buildtree(dataset, score_func=gini_impurity, beta=0):
     best_impurity_decrease, criteria, sets = split_dataset(dataset, impurity, score_func)
 
     if best_impurity_decrease > beta:
-        return desicionnode(col=criteria[0], value=criteria[1], tb=buildtree(sets[0]), fb=buildtree(sets[0]))
+        return desicionnode(col=criteria[0], value=criteria[1], tb=buildtree(sets[0]), fb=buildtree(sets[1]))
     else:
         return desicionnode(results=unique_counts(dataset))
 
