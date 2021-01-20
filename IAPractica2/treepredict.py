@@ -87,7 +87,7 @@ def entropy(part):
 def divideset(part, column, value):
     split_function = None
     if isinstance(value, int) or isinstance(value, float):
-        split_function = lambda row: row[column] >= value
+        split_function = lambda row: row[column] <= value
     else:
         split_function = lambda row: row[column] == value
     # Split "part accordinf "split_function"
