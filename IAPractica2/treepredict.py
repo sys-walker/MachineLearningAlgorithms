@@ -1,11 +1,6 @@
 #! /usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-import sys
-import os
-import random
-import time
-
 
 # --------------------- t1  ---------------------
 # Download the data file descision_tree_example.txt from the virtual campus at folder/lab/learning.
@@ -114,21 +109,48 @@ class desicionnode:
 
 # --------------------- t9  ---------------------
 # Construcción del árbol de forma recursiva.
-def buildtree(dataset,score_func = gini_impurity,beta=0):
+def buildtree(dataset, score_func=gini_impurity, beta=0):
     if len(dataset) == 0:
         return desicionnode()
-    impurity=score_func(dataset)
+    impurity = score_func(dataset)
 
     # best split criteria
-    best_impurity_decrease=0
-    criteria=None
-    sets=[None],[None]
-    #todo search bests criteria
+    best_impurity_decrease, criteria, sets = split_dataset(dataset, impurity, score_func)
+
     if best_impurity_decrease > beta:
-        pass  # todo recursion subtree -1,None
-        return desicionnode(col=-1, value=None, tb=buildtree(sets[0]), fb=buildtree(sets[0]))
+        return desicionnode(col=criteria[0], value=criteria[1], tb=buildtree(sets[0]), fb=buildtree(sets[0]))
     else:
         return desicionnode(results=unique_counts(dataset))
+
+
+def split_dataset(dataset, impurity, score_func):
+    """splits data set in two sets"""
+    best_impurity_decrease = 0
+    criteria = None
+    sets = None
+    for atribute_idx in range(len(dataset[0]) - 1):
+        atribute_values = get_column_values(atribute_idx, dataset)
+        for value in atribute_values:
+            (setT, setF) = divideset(dataset, atribute_idx, value)
+            impurityT = score_func(setT)
+            impurityF = score_func(setF)
+            impurity_decrease = impurity - ((float(len(setT)) / len(dataset)) * impurityT) - (
+                    (float(len(setF)) / len(dataset)) * impurityF)
+
+            if len(setT) > 0 and len(setF) > 0 and impurity_decrease > best_impurity_decrease:
+                best_impurity_decrease = impurity_decrease
+                criteria = (atribute_idx, value)
+                sets = (setT, setF)
+    return best_impurity_decrease, criteria, sets
+
+
+def get_column_values(atribute_idx, dataset):
+    atribute_values = []
+    for row in dataset:
+        if row not in atribute_values:
+            atribute_values.append(row[atribute_idx])
+    return atribute_values
+
 
 # --------------------- t10 ---------------------
 # Construcción del árbol de forma iterativa.
@@ -159,7 +181,6 @@ if __name__ == '__main__':
     giniIndex = gini_impurity(prototypes)
     entropyValue = entropy(prototypes)
     print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
-
 
     # print unique_counts(prototypes)
     # print gini_impurity(prototypes)
