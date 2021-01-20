@@ -181,7 +181,8 @@ if __name__ == '__main__':
     giniIndex = gini_impurity(prototypes)
     entropyValue = entropy(prototypes)
     print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
-
+    desisicion_tree = buildtree(prototypes)
+    printtree(desisicion_tree)
     # print unique_counts(prototypes)
     # print gini_impurity(prototypes)
     # print entropy(prototypes)
