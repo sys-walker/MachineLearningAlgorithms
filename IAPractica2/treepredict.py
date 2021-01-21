@@ -1,6 +1,37 @@
 #! /usr/bin/env python2
 # -*- coding: utf-8 -*-
 
+class Queue:
+    "A container with a first-in-first-out (FIFO) queuing policy."
+    def __init__(self):
+        self.list = []
+
+    def push(self,item):
+        "Enqueue the 'item' into the queue"
+        self.list.insert(0,item)
+
+    def pop(self):
+        """
+          Dequeue the earliest enqueued item still in the queue. This
+          operation removes the item from the queue.
+        """
+        return self.list.pop()
+
+    def isEmpty(self):
+        "Returns true if the queue is empty"
+        return len(self.list) == 0
+    def size(self):
+        "Returns the queue's size"
+        return len(self.list)
+    def print_(self):
+        print "------ I -------"
+        for e in self.list:
+            print e
+        print "------ O -------"
+
+    def print_size(self):
+        print (self.size())
+
 
 # --------------------- t1  ---------------------
 # Download the data file descision_tree_example.txt from the virtual campus at folder/lab/learning.
@@ -125,7 +156,7 @@ def buildtree(dataset, score_func=gini_impurity, beta=0):
 
 def split_dataset(dataset, impurity, score_func):
     """splits data set in two sets"""
-    best_impurity_decrease = 0
+    best_decrease_impurity = 0
     criteria = None
     sets = None
     for atribute_idx in range(len(dataset[0]) - 1):
@@ -135,13 +166,13 @@ def split_dataset(dataset, impurity, score_func):
             impurityT = score_func(setT)
             impurityF = score_func(setF)
             impurity_decrease = impurity - ((float(len(setT)) / len(dataset)) * impurityT) - (
-                    (float(len(setF)) / len(dataset)) * impurityF)
+                        (float(len(setF)) / len(dataset)) * impurityF)
 
-            if len(setT) > 0 and len(setF) > 0 and impurity_decrease > best_impurity_decrease:
-                best_impurity_decrease = impurity_decrease
+            if len(setT) > 0 and len(setF) > 0 and impurity_decrease > best_decrease_impurity:
+                best_decrease_impurity = impurity_decrease
                 criteria = (atribute_idx, value)
                 sets = (setT, setF)
-    return best_impurity_decrease, criteria, sets
+    return best_decrease_impurity, criteria, sets
 
 
 def get_column_values(atribute_idx, dataset):
@@ -154,6 +185,191 @@ def get_column_values(atribute_idx, dataset):
 
 # --------------------- t10 ---------------------
 # Construcción del árbol de forma iterativa.
+def buildtree_iterative(dataset, score_func=gini_impurity, beta=0):
+    print " ---------------------  BEGIN PREVIEW  --------------------- "
+    if len(dataset) == 0:
+        return desicionnode()
+
+
+    q = Queue()
+    q.print_()
+    q.push((dataset,False))
+    q.print_()
+    print "inici bucle"
+
+    while not q.isEmpty():
+
+        part, leaf = q.pop()
+        q.print_()
+        print "-->", part
+
+        if not leaf:
+            best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+            if best_impurity_decrease > beta:
+                print "------------ criteria ", criteria[1], " -----------------"
+                print "set extracted:    "+str(criteria[1])
+                print "set extracted: No " + str(criteria[1])
+                q.push((sets[0], False))
+                q.push((sets[1], False))
+            else:
+                q.push((unique_counts(part), True))
+        else:
+            print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+str(part)
+            pass
+        print "##########################################################################"
+    print " --------------------- EBD PREVIEW --------------------- "
+
+
+
+
+
+
+    '''
+
+
+    q.print_()
+    print "inici bucle"
+    part = q.pop()
+    print "-->",part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+
+
+
+    q.print_()
+    part = q.pop()
+    print "-->", part
+    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
+    if best_impurity_decrease > beta:
+        print "------------", criteria[1], " -----------------"
+        q.push(sets[0])
+        q.push(sets[1])
+    else:
+        print "---------------- BETA !!---------------"
+        q.push(unique_counts(part))
+    print "##########################################################################"
+    '''
+
+
+
+
+
+
+
+
+
+
 
 # --------------------- t11 ---------------------
 # Include the following function printtree:
@@ -180,9 +396,15 @@ if __name__ == '__main__':
     count = unique_counts(prototypes)
     giniIndex = gini_impurity(prototypes)
     entropyValue = entropy(prototypes)
-    print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
+    #print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
+    buildtree_iterative(prototypes)
     desisicion_tree = buildtree(prototypes)
+
     printtree(desisicion_tree)
+
+
+    #printtree(desisicion_tree)
+
     # print unique_counts(prototypes)
     # print gini_impurity(prototypes)
     # print entropy(prototypes)
