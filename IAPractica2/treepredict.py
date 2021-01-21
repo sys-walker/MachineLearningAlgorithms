@@ -129,13 +129,16 @@ def divideset(part, column, value):
 
 # --------------------- t8  ---------------------
 # Define a new class decisionnode, which represents a node in the tree.
-class desicionnode:
+class desicionnode():
     def __init__(self, col=-1, value=None, results=None, tb=None, fb=None):
         self.col = col
         self.value = value
         self.results = results
         self.tb = tb
         self.fb = fb
+
+    def __str__(self):
+        return "NODE ->col="+str(self.col)+" val="+str(self.value)+" res="+str(self.results)+" tb="+str("subtree" if self.tb!=None else "None")+" fb="+str("subtree" if self.fb!=None else "None")+"<-"
 
 
 # --------------------- t9  ---------------------
@@ -189,6 +192,9 @@ def buildtree_iterative(dataset, score_func=gini_impurity, beta=0):
     print " ---------------------  BEGIN PREVIEW  --------------------- "
     if len(dataset) == 0:
         return desicionnode()
+    tree = desicionnode()
+    t = Queue()
+    t.push(tree)
 
 
     q = Queue()
@@ -203,20 +209,41 @@ def buildtree_iterative(dataset, score_func=gini_impurity, beta=0):
         q.print_()
         print "-->", part
 
+        node = t.pop()
+
+
         if not leaf:
+
+
+
             best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
             if best_impurity_decrease > beta:
                 print "------------ criteria ", criteria[1], " -----------------"
                 print "set extracted:    "+str(criteria[1])
                 print "set extracted: No " + str(criteria[1])
+                node.col = criteria[0]
+                node.value = criteria[1]
+                node.tb = desicionnode()
+                node.fb = desicionnode()
+                print (node)
+                t.push(node.tb)
+                t.push(node.fb)
+
                 q.push((sets[0], False))
                 q.push((sets[1], False))
             else:
                 q.push((unique_counts(part), True))
+                node.results= unique_counts(part)
+                t.push(node)
+                print str(node)  # str(part)
         else:
-            print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+str(part)
+            node.results = part
+            t.push(node)
+
             pass
         print "##########################################################################"
+        raw_input()
+    printtree(tree=tree)
     print " --------------------- EBD PREVIEW --------------------- "
 
 
@@ -379,7 +406,12 @@ def printtree(tree, indent=''):
         print(indent + str(tree.results))
     else:
         # Print the criteria
-        print(indent + str(tree.col) + ':' + str(tree.value) + '? ')
+        # Little modification to make clear split condition
+        if isinstance(tree.value, int) or isinstance(tree.value, int):
+            s = " <= " + str(tree.value)
+        else:
+            s=" =="+str(tree.value)
+        print(indent + str(tree.col) + ':' + str(s) + '? ')
         # Print the branches
         print(indent + 'T->')
         printtree(tree.tb, indent + '  ')
