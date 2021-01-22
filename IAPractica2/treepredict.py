@@ -214,8 +214,6 @@ def buildtree_iterative(dataset, score_func=gini_impurity, beta=0):
 
         if not leaf:
 
-
-
             best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
             if best_impurity_decrease > beta:
                 print "------------ criteria ", criteria[1], " -----------------"
@@ -237,159 +235,15 @@ def buildtree_iterative(dataset, score_func=gini_impurity, beta=0):
                 t.push(node)
                 print str(node)  # str(part)
         else:
+
             node.results = part
-            t.push(node)
+            #t.push(node)
 
             pass
         print "##########################################################################"
-        raw_input()
+        #raw_input()
     printtree(tree=tree)
     print " --------------------- EBD PREVIEW --------------------- "
-
-
-
-
-
-
-    '''
-
-
-    q.print_()
-    print "inici bucle"
-    part = q.pop()
-    print "-->",part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-
-
-
-    q.print_()
-    part = q.pop()
-    print "-->", part
-    best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
-    if best_impurity_decrease > beta:
-        print "------------", criteria[1], " -----------------"
-        q.push(sets[0])
-        q.push(sets[1])
-    else:
-        print "---------------- BETA !!---------------"
-        q.push(unique_counts(part))
-    print "##########################################################################"
-    '''
-
-
-
 
 
 
