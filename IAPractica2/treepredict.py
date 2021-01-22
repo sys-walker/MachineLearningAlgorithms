@@ -267,7 +267,7 @@ if __name__ == '__main__':
     entropyValue = entropy(prototypes)
     print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
     print " --------------------- Iterative  --------------------- "
-    desisicion_tree = buildtree(prototypes)
+    desisicion_tree = buildtree_iterative(prototypes)
     printtree(desisicion_tree)
 
     print " --------------------- Recursion --------------------- "
