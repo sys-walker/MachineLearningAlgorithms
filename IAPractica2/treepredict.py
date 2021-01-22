@@ -3,12 +3,13 @@
 
 class Queue:
     "A container with a first-in-first-out (FIFO) queuing policy."
+
     def __init__(self):
         self.list = []
 
-    def push(self,item):
+    def push(self, item):
         "Enqueue the 'item' into the queue"
-        self.list.insert(0,item)
+        self.list.insert(0, item)
 
     def pop(self):
         """
@@ -20,17 +21,10 @@ class Queue:
     def isEmpty(self):
         "Returns true if the queue is empty"
         return len(self.list) == 0
+
     def size(self):
         "Returns the queue's size"
         return len(self.list)
-    def print_(self):
-        print "------ I -------"
-        for e in self.list:
-            print e
-        print "------ O -------"
-
-    def print_size(self):
-        print (self.size())
 
 
 # --------------------- t1  ---------------------
@@ -129,16 +123,13 @@ def divideset(part, column, value):
 
 # --------------------- t8  ---------------------
 # Define a new class decisionnode, which represents a node in the tree.
-class desicionnode():
+class desicionnode:
     def __init__(self, col=-1, value=None, results=None, tb=None, fb=None):
         self.col = col
         self.value = value
         self.results = results
         self.tb = tb
         self.fb = fb
-
-    def __str__(self):
-        return "NODE ->col="+str(self.col)+" val="+str(self.value)+" res="+str(self.results)+" tb="+str("subtree" if self.tb!=None else "None")+" fb="+str("subtree" if self.fb!=None else "None")+"<-"
 
 
 # --------------------- t9  ---------------------
@@ -169,7 +160,7 @@ def split_dataset(dataset, impurity, score_func):
             impurityT = score_func(setT)
             impurityF = score_func(setF)
             impurity_decrease = impurity - ((float(len(setT)) / len(dataset)) * impurityT) - (
-                        (float(len(setF)) / len(dataset)) * impurityF)
+                    (float(len(setF)) / len(dataset)) * impurityF)
 
             if len(setT) > 0 and len(setF) > 0 and impurity_decrease > best_decrease_impurity:
                 best_decrease_impurity = impurity_decrease
@@ -189,67 +180,45 @@ def get_column_values(atribute_idx, dataset):
 # --------------------- t10 ---------------------
 # Construcción del árbol de forma iterativa.
 def buildtree_iterative(dataset, score_func=gini_impurity, beta=0):
-    print " ---------------------  BEGIN PREVIEW  --------------------- "
     if len(dataset) == 0:
         return desicionnode()
-    tree = desicionnode()
+
+    root = desicionnode()
+
     t = Queue()
-    t.push(tree)
-
-
     q = Queue()
-    q.print_()
-    q.push((dataset,False))
-    q.print_()
-    print "inici bucle"
+
+    # True if is a Leaf
+    # False if is a branch or root Node
+    t.push(root)
+    q.push((dataset, False))
 
     while not q.isEmpty():
-
         part, leaf = q.pop()
-        q.print_()
-        print "-->", part
-
         node = t.pop()
-
-
         if not leaf:
-
+            # Split dataset by impurity function and creates the branches
             best_impurity_decrease, criteria, sets = split_dataset(part, score_func(part), score_func)
             if best_impurity_decrease > beta:
-                print "------------ criteria ", criteria[1], " -----------------"
-                print "set extracted:    "+str(criteria[1])
-                print "set extracted: No " + str(criteria[1])
                 node.col = criteria[0]
                 node.value = criteria[1]
+
                 node.tb = desicionnode()
                 node.fb = desicionnode()
-                print (node)
+
                 t.push(node.tb)
                 t.push(node.fb)
 
                 q.push((sets[0], False))
                 q.push((sets[1], False))
             else:
+                # It is a branch that will be treated as a leaf by the beta parameter
+                # or just it is a leaf and sets it True
                 q.push((unique_counts(part), True))
-                node.results= unique_counts(part)
                 t.push(node)
-                print str(node)  # str(part)
         else:
-
             node.results = part
-            #t.push(node)
-
-            pass
-        print "##########################################################################"
-        #raw_input()
-    printtree(tree=tree)
-    print " --------------------- EBD PREVIEW --------------------- "
-
-
-
-
-
-
+    return root
 
 
 # --------------------- t11 ---------------------
@@ -264,7 +233,7 @@ def printtree(tree, indent=''):
         if isinstance(tree.value, int) or isinstance(tree.value, int):
             s = " <= " + str(tree.value)
         else:
-            s=" =="+str(tree.value)
+            s = " == " + str(tree.value)
         print(indent + str(tree.col) + ':' + str(s) + '? ')
         # Print the branches
         print(indent + 'T->')
@@ -274,28 +243,33 @@ def printtree(tree, indent=''):
 
 
 # --------------------- t12 ---------------------
-# Función de clasificación.
-# --------------------- t13 ---------------------
+# Build a function classify that allows to classify new objects.
+# It must return the dictionary that represents the partition ofthe leave node where the object is classified.
+def classify(object, tree):
+    split_function = None
+    if isinstance(tree.value, int) or isinstance(tree.value, float):
+        split_function = lambda x: x[tree.col] >= tree.value
+    else:
+        split_function = lambda x: x[tree.col] == tree.value
+
+    if tree.results is not None:
+        return tree.results
+    else:
+        if split_function(object):
+            return classify(object, tree.tb)
+        else:
+            return classify(object, tree.fb)
 
 if __name__ == '__main__':
     prototypes = read_file("decision_tree_example.txt", data_sep=",", ignore_first_line=True)
     count = unique_counts(prototypes)
     giniIndex = gini_impurity(prototypes)
     entropyValue = entropy(prototypes)
-    #print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
-    buildtree_iterative(prototypes)
+    print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
+    print " --------------------- Iterative  --------------------- "
     desisicion_tree = buildtree(prototypes)
-
     printtree(desisicion_tree)
 
-
-    #printtree(desisicion_tree)
-
-    # print unique_counts(prototypes)
-    # print gini_impurity(prototypes)
-    # print entropy(prototypes)
-    # set1,set2= divideset(prototypes,column=0,value="google")
-    # print set1
-    # print
-    # print set2
-    pass
+    print " --------------------- Recursion --------------------- "
+    tree = buildtree(prototypes)
+    printtree(tree)
