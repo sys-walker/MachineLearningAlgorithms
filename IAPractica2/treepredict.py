@@ -112,7 +112,7 @@ def entropy(part):
 def divideset(part, column, value):
     split_function = None
     if isinstance(value, int) or isinstance(value, float):
-        split_function = lambda row: row[column] <= value
+        split_function = lambda row: row[column] >= value
     else:
         split_function = lambda row: row[column] == value
     # Split "part accordinf "split_function"
@@ -230,8 +230,8 @@ def printtree(tree, indent=''):
     else:
         # Print the criteria
         # Little modification to make clear split condition
-        if isinstance(tree.value, int) or isinstance(tree.value, int):
-            s = " <= " + str(tree.value)
+        if isinstance(tree.value, int) or isinstance(tree.value, float):
+            s = " >= " + str(tree.value)
         else:
             s = " == " + str(tree.value)
         print(indent + str(tree.col) + ':' + str(s) + '? ')
@@ -265,11 +265,11 @@ if __name__ == '__main__':
     count = unique_counts(prototypes)
     giniIndex = gini_impurity(prototypes)
     entropyValue = entropy(prototypes)
-    print"\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue)
-    print " --------------------- Iterative  --------------------- "
+    print ("\nGini Index: " + str(giniIndex) + " Entropy: " + str(entropyValue))
+    print (" --------------------- Iterative  --------------------- ")
     desisicion_tree = buildtree_iterative(prototypes)
     printtree(desisicion_tree)
 
-    print " --------------------- Recursion --------------------- "
+    print (" --------------------- Recursion --------------------- ")
     tree = buildtree(prototypes)
     printtree(tree)
